@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ public class LoginController {
 		return "Aur Lavde kaisa hai"+session.getId();
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("about")
 	public String getAbout(HttpSession session) {
 		return "sbout "+session.getId();
