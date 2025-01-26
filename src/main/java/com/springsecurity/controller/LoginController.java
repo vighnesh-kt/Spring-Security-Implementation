@@ -2,7 +2,11 @@ package com.springsecurity.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springsecurity.dao.MyUserDao;
 import com.springsecurity.entity.Student;
+import com.springsecurity.entity.User;
+import com.springsecurity.repository.MyUserRepo;
+import com.springsecurity.service.MyUserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class LoginController {
+	
+	private MyUserService mus;
 	
 	@GetMapping("hello")
 	public String loginCOntroller(HttpSession session) {
@@ -49,6 +55,11 @@ public class LoginController {
 		//TODO: process POST request
 		students.add(student);
 		return students;
+	}
+	
+	@PostMapping("addUser")
+	public User addUser(@RequestBody User user) {
+		return mus.addUser(user);
 	}
 	
 	@GetMapping("csrf")
