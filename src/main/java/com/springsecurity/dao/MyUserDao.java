@@ -12,16 +12,21 @@ import com.springsecurity.repository.MyUserRepo;
 public class MyUserDao {
 	
 	@Autowired
-	private MyUserRepo userRepo;
+	private MyUserRepo myUserRepo;
 
 	public User findByUsername(String string) {
 		// TODO Auto-generated method stub
-		return userRepo.findByUsername(string);
+		return myUserRepo.findByUsername(string);
 	}
 
 	public User addUser(User user) {
 		// TODO Auto-generated method stub
-		return userRepo.save(user);
+		return myUserRepo.save(user);
+	}
+
+	public List<User> getUsers() {
+		// TODO Auto-generated method stub
+		return myUserRepo.findAll();
 	}
 
 }

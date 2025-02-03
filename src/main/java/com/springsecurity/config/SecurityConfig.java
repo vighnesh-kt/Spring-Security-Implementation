@@ -1,25 +1,27 @@
 package com.springsecurity.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.proxy.NoOp;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 	
 	@Autowired
@@ -29,20 +31,35 @@ public class SecurityConfig {
 	public AuthenticationProvider ap() {
 		DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
 		provider.setUserDetailsService(uds);
-		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+		provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
 		return provider;
 	}
 	
 
 	@Bean
 	public SecurityFilterChain sfc(HttpSecurity sec) throws Exception {
-		
-		sec.authorizeHttpRequests(req->req.anyRequest().authenticated());
+		 sec
+         .authorizeHttpRequests(auth -> auth
+             .requestMatchers("/admin/**").hasRole("ADMIN")   // Only allow access to "ROLE_ADMIN"
+             //.requestMatchers("adduser","login").permitAll()
+             .anyRequest().authenticated()                   // All other requests must be authenticated
+         );
 		sec.csrf(csrf->csrf.disable());
 		//sec.formLogin(Customizer.withDefaults());
 		sec.httpBasic(Customizer.withDefaults());
 		sec.sessionManagement(ses->ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		return sec.build();
+	}
+	
+	
+	@Bean
+	public BCryptPasswordEncoder encoder() {
+		return new BCryptPasswordEncoder(12);
+	}
+	
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
 	}
 	
 //	@Bean
