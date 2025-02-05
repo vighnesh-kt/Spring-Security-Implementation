@@ -40,9 +40,10 @@ public class SecurityConfig {
 	public SecurityFilterChain sfc(HttpSecurity sec) throws Exception {
 		 sec
          .authorizeHttpRequests(auth -> auth
-             .requestMatchers("/admin/**").hasRole("ADMIN")   // Only allow access to "ROLE_ADMIN"
-             //.requestMatchers("adduser","login").permitAll()
-             .anyRequest().authenticated()                   // All other requests must be authenticated
+        		
+             .requestMatchers("/admin/**").hasRole("ADMIN")  // Only allow access to "ROLE_ADMIN"
+             .requestMatchers("adduser","login").permitAll()
+             .anyRequest().authenticated()    // All other requests must be authenticated
          );
 		sec.csrf(csrf->csrf.disable());
 		//sec.formLogin(Customizer.withDefaults());
@@ -50,6 +51,21 @@ public class SecurityConfig {
 		sec.sessionManagement(ses->ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		return sec.build();
 	}
+	
+//	@Bean
+//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//
+//		http.csrf(customizer -> customizer.disable())
+//				.authorizeHttpRequests(request -> request
+//						.requestMatchers("register", "login")
+//						.permitAll()
+//						.requestMatchers("/admin/**").hasRole("ADMIN")   // Only allow access to "ROLE_ADMIN"
+//						.anyRequest().authenticated())
+//				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+////				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//		return http.build();
+//	}
 	
 	
 	@Bean

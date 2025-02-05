@@ -15,18 +15,18 @@ import com.springsecurity.entity.User;
 import com.springsecurity.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private JWTService jwtService;
 
@@ -34,21 +34,26 @@ public class UserController {
 	public User addUser(@RequestBody User user) {
 		return userService.addUser(user);
 	}
-	
+
 	@GetMapping("/admin/getusers")
 	public List<User> getUser() {
 		return userService.getUsers();
 	}
-	
+
 	@PostMapping("login")
 	public String login(@RequestBody User user) {
-		Authentication authentication=authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
-		//System.out.println(user.getUsername());
-		if(authentication.isAuthenticated()) {
-			return jwtService.generateToken(user.getUsername());
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+		if (authentication.isAuthenticated()) {
+			return jwtService.generateToken(user.getEmail());
 		}
 		return "Failed";
 	}
 	
+	@GetMapping("home")
+	public String getMethodName(@RequestParam String param) {
+		return "Welcome home";
+	}
 	
+
 }

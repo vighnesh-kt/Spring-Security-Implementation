@@ -29,11 +29,17 @@ public class JWTService {
 	public String generateToken(String username) {
 		Map<String, Object> claims= new HashMap<>();
 		return Jwts.builder()
-		.setClaims(claims)
-		.subject(username)
-		.setIssuedAt(new Date(System.currentTimeMillis()))
-		.setExpiration(new Date(System.currentTimeMillis()*30*60*1000))
-		.signWith(getKey(), SignatureAlgorithm.HS256).compact();
+//		.setClaims(claims)
+//		.subject(username)
+//		.setIssuedAt(new Date(System.currentTimeMillis()))
+//		.setExpiration(new Date(System.currentTimeMillis()+ 1000*60*30))
+//		.signWith(getKey(), SignatureAlgorithm.HS256).compact();
+		  .claims(claims) // Or add claims directly here, e.g., .claim("key", "value")
+	        .subject(username)
+	        .issuedAt(new Date(System.currentTimeMillis()))
+	        .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 30 minutes
+	        .signWith(getKey()) // Ensure getKey() returns a SecretKey
+	        .compact();
 		
 	}
 	
@@ -41,8 +47,14 @@ public class JWTService {
 		try {
 			KeyGenerator keyGen= KeyGenerator.getInstance("HmacSHA256");
 			SecretKey secretKey =keyGen.generateKey();
-			System.out.println(secretKey.toString());
-			return Base64.getEncoder().encodeToString(secretKey.getEncoded());
+			// Print the raw byte array of the secret key
+            byte[] encodedKey = secretKey.getEncoded();
+            System.out.println("Secret Key (Byte Array): " + encodedKey);
+
+            // Optionally, you can encode it to Base64 to make it human-readable
+            String base64EncodedKey = Base64.getEncoder().encodeToString(encodedKey);
+            System.out.println("Secret Key (Base64 Encoded): " + base64EncodedKey);
+			return Base64.getEncoder().encodeToString(secretKey.getEncoded());//directly converting 
 			
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
