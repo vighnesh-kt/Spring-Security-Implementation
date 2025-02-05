@@ -14,9 +14,9 @@ public class MyUserDao {
 	@Autowired
 	private MyUserRepo myUserRepo;
 
-	public User findByUsername(String string) {
+	public User findByEmail(String email) {
 		// TODO Auto-generated method stub
-		return myUserRepo.findByUsername(string);
+		return myUserRepo.findByEmail(email);
 	}
 
 	public User addUser(User user) {

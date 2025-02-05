@@ -19,9 +19,9 @@ public class MyUserDetailsService implements UserDetailsService{
 	private MyUserDao myUserDao;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		User user=myUserDao.findByUsername(username);
+		User user=myUserDao.findByEmail(email);
 		if(user==null) {
 			System.out.println("Galat mat daal");
 			throw new UsernameNotFoundException("Sorry not found");

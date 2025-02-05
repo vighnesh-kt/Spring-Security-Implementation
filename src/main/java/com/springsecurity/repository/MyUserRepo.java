@@ -10,6 +10,6 @@ import com.springsecurity.entity.User;
 @Repository
 public interface MyUserRepo extends JpaRepository<User, Integer>{
 	
-	User findByUsername(String username);
+	User findByEmail(String email);
 
 }
