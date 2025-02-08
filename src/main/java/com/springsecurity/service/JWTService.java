@@ -68,4 +68,9 @@ public class JWTService {
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
+	public String extractUsername(String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
