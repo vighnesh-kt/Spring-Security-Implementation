@@ -51,7 +51,7 @@ public class UserController {
 	}
 	
 	@GetMapping("home")
-	public String getMethodName(@RequestParam String param) {
+	public String getMethodName() {
 		return "Welcome home";
 	}
 	
